@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setupCard(R.id.card_setup, "Setup Guide", "Essential first steps:\n\n1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api\n5. termux-chroot (optional)");
         setupCard(R.id.card_storage, "Storage Management", "Manage your Termux storage:\n\n• termux-setup-storage (Access internal storage)\n• du -h (Check disk usage)\n• df -h (Check filesystem space)\n• rm -rf ~/.thumbnails (Clear cache)");
         setupCard(R.id.card_network, "Network Tools", "Network utility commands:\n\n• ifconfig (Check IP address)\n• ping <host> (Test connectivity)\n• netstat -tupln (Active connections)\n• nmap <target> (Network scan)");
+        setupCard(R.id.card_system, "System Information", "Check device hardware & software:\n\n• uname -a (Kernel version)\n• lscpu (CPU architecture)\n• free -h (RAM usage)\n• uptime (System runtime)\n• getprop (Android properties)");
     }
 
     private void setupCard(int id, final String title, final String desc) {
