@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
-    <color name="colorAccent">#FF9800</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#F2F2F7</color>
+    <color name="colorAccent">#007AFF</color>
+    <color name="ios_blue">#007AFF</color>
+    <color name="ios_gray">#8E8E93</color>
+    <color name="ios_background">#F2F2F7</color>
+    <color name="ios_card">#FFFFFF</color>
+    <color name="ios_text_primary">#000000</color>
+    <color name="ios_text_secondary">#3C3C43</color>
 </resources>
