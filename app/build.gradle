@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace 'com.xyra.termux'
     compileSdkVersion 30
     buildToolsVersion "33.0.0"
 
