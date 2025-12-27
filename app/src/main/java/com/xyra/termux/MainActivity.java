@@ -17,26 +17,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-                
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
+        try {
+            setContentView(R.layout.activity_main);
+            
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setDisplayShowTitleEnabled(false);
+                }
             }
+
+            featureTitle = (TextView) findViewById(R.id.feature_title);
+            featureDescription = (TextView) findViewById(R.id.feature_description);
+            featureContentContainer = (LinearLayout) findViewById(R.id.feature_content_container);
+
+            setupCard(R.id.card_info, "Source Info", "Termux official sources are hosted on GitHub.\n\n• Main app: github.com/termux/termux-app\n• Packages: github.com/termux/termux-packages\n• Wiki: wiki.termux.com");
+            setupCard(R.id.card_package, "Package Search", "Search and manage packages effectively:\n\n• pkg search <query>\n• pkg install <package>\n• pkg list-all\n• pkg files <package>");
+            setupCard(R.id.card_setup, "Setup Guide", "Essential first steps:\n\n1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api\n5. termux-chroot (optional)");
+            setupCard(R.id.card_storage, "Storage Management", "Manage your Termux storage:\n\n• termux-setup-storage (Access internal storage)\n• du -h (Check disk usage)\n• df -h (Check filesystem space)\n• rm -rf ~/.thumbnails (Clear cache)");
+            setupCard(R.id.card_network, "Network Tools", "Network utility commands:\n\n• ifconfig (Check IP address)\n• ping <host> (Test connectivity)\n• netstat -tupln (Active connections)\n• nmap <target> (Network scan)");
+            setupCard(R.id.card_system, "System Information", "Check device hardware & software:\n\n• uname -a (Kernel version)\n• lscpu (CPU architecture)\n• free -h (RAM usage)\n• uptime (System runtime)\n• getprop (Android properties)");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        featureTitle = (TextView) findViewById(R.id.feature_title);
-        featureDescription = (TextView) findViewById(R.id.feature_description);
-        featureContentContainer = (LinearLayout) findViewById(R.id.feature_content_container);
-
-        setupCard(R.id.card_info, "Source Info", "Termux official sources are hosted on GitHub.\n\n• Main app: github.com/termux/termux-app\n• Packages: github.com/termux/termux-packages\n• Wiki: wiki.termux.com");
-        setupCard(R.id.card_package, "Package Search", "Search and manage packages effectively:\n\n• pkg search <query>\n• pkg install <package>\n• pkg list-all\n• pkg files <package>");
-        setupCard(R.id.card_setup, "Setup Guide", "Essential first steps:\n\n1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api\n5. termux-chroot (optional)");
-        setupCard(R.id.card_storage, "Storage Management", "Manage your Termux storage:\n\n• termux-setup-storage (Access internal storage)\n• du -h (Check disk usage)\n• df -h (Check filesystem space)\n• rm -rf ~/.thumbnails (Clear cache)");
-        setupCard(R.id.card_network, "Network Tools", "Network utility commands:\n\n• ifconfig (Check IP address)\n• ping <host> (Test connectivity)\n• netstat -tupln (Active connections)\n• nmap <target> (Network scan)");
-        setupCard(R.id.card_system, "System Information", "Check device hardware & software:\n\n• uname -a (Kernel version)\n• lscpu (CPU architecture)\n• free -h (RAM usage)\n• uptime (System runtime)\n• getprop (Android properties)");
     }
 
     private void setupCard(int id, final String title, final String desc) {
