@@ -44,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupCard(int id, final String title, final String desc) {
-        MaterialCardView card = (MaterialCardView) findViewById(id);
+        final MaterialCardView card = (MaterialCardView) findViewById(id);
         if (card != null) {
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
                     v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100).withEndAction(new Runnable() {
                         @Override
                         public void run() {
