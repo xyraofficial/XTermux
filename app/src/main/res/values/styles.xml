@@ -1,20 +1,31 @@
 <resources>
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/ios_blue</item>
+        <item name="colorPrimaryDark">@color/ios_background</item>
+        <item name="colorAccent">@color/ios_blue</item>
         <item name="android:windowBackground">@color/ios_background</item>
+        <item name="android:navigationBarColor">@color/ios_background</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="IOSTextTitle">
         <item name="android:textSize">34sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/ios_text_primary</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-black</item>
+        <item name="android:letterSpacing">-0.02</item>
     </style>
 
     <style name="IOSCard">
         <item name="android:background">@color/ios_card</item>
         <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="IOSCategoryHeader">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/ios_gray</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 </resources>

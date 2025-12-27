@@ -49,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
-                    v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100).withEndAction(new Runnable() {
+                    v.animate().scaleX(0.96f).scaleY(0.96f).setDuration(80).withEndAction(new Runnable() {
                         @Override
                         public void run() {
-                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100);
+                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(120).start();
                             showFeature(title, desc);
                         }
-                    });
+                    }).start();
                 }
             });
         }
@@ -65,14 +65,15 @@ public class MainActivity extends AppCompatActivity {
         if (featureContentContainer != null) {
             featureContentContainer.animate()
                 .alpha(0f)
-                .translationY(50f)
-                .setDuration(200)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(250)
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
                         featureContentContainer.setVisibility(View.GONE);
                     }
-                });
+                }).start();
         }
     }
 
@@ -82,11 +83,14 @@ public class MainActivity extends AppCompatActivity {
         if (featureContentContainer != null) {
             featureContentContainer.setVisibility(View.VISIBLE);
             featureContentContainer.setAlpha(0f);
-            featureContentContainer.setTranslationY(50f);
+            featureContentContainer.setScaleX(0.9f);
+            featureContentContainer.setScaleY(0.9f);
             featureContentContainer.animate()
                 .alpha(1f)
-                .translationY(0f)
-                .setDuration(300)
+                .scaleX(1f)
+                .scaleY(1f)
+                .setDuration(400)
+                .setInterpolator(new android.view.animation.OvershootInterpolator(1.2f))
                 .start();
         }
     }
