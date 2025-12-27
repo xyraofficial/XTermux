@@ -7,12 +7,13 @@
     <color name="ios_gray">#8E8E93</color>
     <color name="ios_background">#F2F2F7</color>
     <color name="ios_card">#FFFFFF</color>
-    <color name="ios_text_primary">#000000</color>
-    <color name="ios_text_secondary">#3C3C43</color>
+    <color name="ios_text_primary">#1C1C1E</color>
+    <color name="ios_text_secondary">#8E8E93</color>
     <color name="ios_green">#34C759</color>
     <color name="ios_orange">#FF9500</color>
-    <color name="ios_glass_bg">#CCFFFFFF</color>
-    <color name="ios_accent_soft">#E5F1FF</color>
+    <color name="ios_glass_bg">#D1D1D6</color>
+    <color name="ios_accent_soft">#F2F2F7</color>
     <color name="ios_purple">#AF52DE</color>
     <color name="ios_pink">#FF2D55</color>
+    <color name="ios_separator">#C6C6C8</color>
 </resources>

@@ -45,9 +45,30 @@ public class MainActivity extends AppCompatActivity {
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showFeature(title, desc);
+                    v.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100).withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(100);
+                            showFeature(title, desc);
+                        }
+                    });
                 }
             });
+        }
+    }
+
+    public void hideFeature(View view) {
+        if (featureContentContainer != null) {
+            featureContentContainer.animate()
+                .alpha(0f)
+                .translationY(50f)
+                .setDuration(200)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        featureContentContainer.setVisibility(View.GONE);
+                    }
+                });
         }
     }
 
@@ -56,6 +77,13 @@ public class MainActivity extends AppCompatActivity {
         if (featureDescription != null) featureDescription.setText(description);
         if (featureContentContainer != null) {
             featureContentContainer.setVisibility(View.VISIBLE);
+            featureContentContainer.setAlpha(0f);
+            featureContentContainer.setTranslationY(50f);
+            featureContentContainer.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(300)
+                .start();
         }
     }
 }
