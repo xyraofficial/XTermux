@@ -1,0 +1,43 @@
+Error ini terjadi karena ada kesalahan penulisan (syntax error) pada file layout XML di proyek Android kamu. GitHub Actions hanya melaporkan bahwa proses build gagal karena file tersebut tidak bisa dibaca dengan benar.
+Berikut adalah detail penyebab dan cara memperbaikinya:
+1. Penyebab Utama
+Berdasarkan log di baris ke-37 dan ke-65:
+> [Fatal Error] activity_main.xml:488:27: The element type "LinearLayout" must be terminated by the matching end-tag "</LinearLayout>".
+> 
+Ini artinya ada tag <LinearLayout> yang belum ditutup atau penutupnya salah ketik di file activity_main.xml pada baris 488.
+2. Cara Memperbaiki
+Kamu perlu membuka file berikut di kode sumbermu:
+app/src/main/res/layout/activity_main.xml
+Periksa bagian akhir file atau sekitar baris 488. Pastikan setiap tag pembuka memiliki tag penutup yang sesuai. Struktur yang benar seharusnya seperti ini:
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    </LinearLayout> ```
+
+**Kemungkinan masalahnya:**
+* Kamu lupa menulis `</LinearLayout>` di akhir file.
+* Kamu tidak sengaja menghapus karakter `>` atau `/`.
+* Ada tag lain di dalam LinearLayout yang juga belum tertutup, sehingga membingungkan sistem pembaca XML.
+
+---
+
+### 3. Masalah Tambahan (Peringatan)
+Log kamu juga menunjukkan peringatan di baris 41-43 mengenai `namespace` di `AndroidManifest.xml`. Meskipun ini bukan penyebab utama *build* gagal, sebaiknya kamu:
+* Hapus `package="com.xyra.termux"` dari file `AndroidManifest.xml`.
+* Pastikan `namespace` sudah didefinisikan di file `build.gradle` (level app) sebagai gantinya: 
+    ```gradle
+    android {
+        namespace 'com.xyra.termux'
+        ...
+    }
+    ```
+
+---
+
+**Saran:**
+Setelah kamu memperbaiki file `activity_main.xml` dan melakukan *commit/push* ulang ke GitHub, workflow GitHub Actions akan berjalan otomatis dan seharusnya statusnya menjadi hijau (berhasil).
+
+Apakah kamu ingin saya bantu memeriksa isi kode `activity_main.xml` milikmu? Kamu bisa *copy-paste* kodenya di sini.
+
