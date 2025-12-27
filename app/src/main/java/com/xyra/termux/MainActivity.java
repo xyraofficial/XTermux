@@ -30,30 +30,36 @@ public class MainActivity extends AppCompatActivity {
         MaterialCardView cardPackage = (MaterialCardView) findViewById(R.id.card_package);
         MaterialCardView cardSetup = (MaterialCardView) findViewById(R.id.card_setup);
 
-        cardInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFeature("Source Info", "Termux official sources are hosted on GitHub. \nMain repo: github.com/termux/termux-app \nPackages: github.com/termux/termux-packages");
-            }
-        });
+        if (cardInfo != null) {
+            cardInfo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFeature("Source Info", "Termux official sources are hosted on GitHub. \nMain repo: github.com/termux/termux-app \nPackages: github.com/termux/termux-packages");
+                }
+            });
+        }
 
-        cardPackage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFeature("Package Search", "Use 'pkg search <name>' in Termux. \nCommon packages: \n- python\n- git\n- vim\n- curl");
-            }
-        });
+        if (cardPackage != null) {
+            cardPackage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFeature("Package Search", "Use 'pkg search <name>' in Termux. \nCommon packages: \n- python\n- git\n- vim\n- curl");
+                }
+            });
+        }
 
-        cardSetup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFeature("Setup Guide", "1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api");
-            }
-        });
+        if (cardSetup != null) {
+            cardSetup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFeature("Setup Guide", "1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api");
+                }
+            });
+        }
     }
 
     private void showFeature(String title, String description) {
-        featureTitle.setText(title);
-        featureDescription.setText(description);
+        if (featureTitle != null) featureTitle.setText(title);
+        if (featureDescription != null) featureDescription.setText(description);
     }
 }
