@@ -3,6 +3,7 @@ package com.xyra.termux;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.card.MaterialCardView;
@@ -11,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
     
     private TextView featureTitle;
     private TextView featureDescription;
+    private LinearLayout featureContentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,41 +20,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
                 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+            }
         }
 
         featureTitle = (TextView) findViewById(R.id.feature_title);
         featureDescription = (TextView) findViewById(R.id.feature_description);
+        featureContentContainer = (LinearLayout) findViewById(R.id.feature_content_container);
 
-        MaterialCardView cardInfo = (MaterialCardView) findViewById(R.id.card_info);
-        MaterialCardView cardPackage = (MaterialCardView) findViewById(R.id.card_package);
-        MaterialCardView cardSetup = (MaterialCardView) findViewById(R.id.card_setup);
+        setupCard(R.id.card_info, "Source Info", "Termux official sources are hosted on GitHub.\n\n• Main app: github.com/termux/termux-app\n• Packages: github.com/termux/termux-packages\n• Wiki: wiki.termux.com");
+        setupCard(R.id.card_package, "Package Search", "Search and manage packages effectively:\n\n• pkg search <query>\n• pkg install <package>\n• pkg list-all\n• pkg files <package>");
+        setupCard(R.id.card_setup, "Setup Guide", "Essential first steps:\n\n1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api\n5. termux-chroot (optional)");
+    }
 
-        if (cardInfo != null) {
-            cardInfo.setOnClickListener(new View.OnClickListener() {
+    private void setupCard(int id, final String title, final String desc) {
+        MaterialCardView card = (MaterialCardView) findViewById(id);
+        if (card != null) {
+            card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showFeature("Source Info", "Termux official sources are hosted on GitHub. \nMain repo: github.com/termux/termux-app \nPackages: github.com/termux/termux-packages");
-                }
-            });
-        }
-
-        if (cardPackage != null) {
-            cardPackage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFeature("Package Search", "Use 'pkg search <name>' in Termux. \nCommon packages: \n- python\n- git\n- vim\n- curl");
-                }
-            });
-        }
-
-        if (cardSetup != null) {
-            cardSetup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFeature("Setup Guide", "1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api");
+                    showFeature(title, desc);
                 }
             });
         }
@@ -61,5 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private void showFeature(String title, String description) {
         if (featureTitle != null) featureTitle.setText(title);
         if (featureDescription != null) featureDescription.setText(description);
+        if (featureContentContainer != null) {
+            featureContentContainer.setVisibility(View.VISIBLE);
+        }
     }
 }
