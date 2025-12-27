@@ -2,14 +2,16 @@ package com.xyra.termux;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
     
+    private TextView featureTitle;
+    private TextView featureDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,19 +23,37 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        final EditText searchInput = (EditText) findViewById(R.id.search_input);
-        Button btnSearch = (Button) findViewById(R.id.btn_search);
+        featureTitle = (TextView) findViewById(R.id.feature_title);
+        featureDescription = (TextView) findViewById(R.id.feature_description);
 
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        MaterialCardView cardInfo = (MaterialCardView) findViewById(R.id.card_info);
+        MaterialCardView cardPackage = (MaterialCardView) findViewById(R.id.card_package);
+        MaterialCardView cardSetup = (MaterialCardView) findViewById(R.id.card_setup);
+
+        cardInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String query = searchInput.getText().toString();
-                if (!query.isEmpty()) {
-                    Toast.makeText(MainActivity.this, "Searching for: " + query, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Please enter a package name", Toast.LENGTH_SHORT).show();
-                }
+                showFeature("Source Info", "Termux official sources are hosted on GitHub. \nMain repo: github.com/termux/termux-app \nPackages: github.com/termux/termux-packages");
             }
         });
+
+        cardPackage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFeature("Package Search", "Use 'pkg search <name>' in Termux. \nCommon packages: \n- python\n- git\n- vim\n- curl");
+            }
+        });
+
+        cardSetup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFeature("Setup Guide", "1. pkg update && pkg upgrade\n2. termux-setup-storage\n3. pkg install build-essential\n4. pkg install termux-api");
+            }
+        });
+    }
+
+    private void showFeature(String title, String description) {
+        featureTitle.setText(title);
+        featureDescription.setText(description);
     }
 }

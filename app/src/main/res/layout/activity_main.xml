@@ -24,7 +24,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingBottom="16dp"
-            android:text="Termux Info"
+            android:text="Termux Toolbox"
             style="@style/IOSTextTitle" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -40,74 +40,130 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Package Search Section -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Toolbox Menu Grid -->
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                android:layout_marginBottom="16dp">
-                
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Package Search"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/ios_blue" />
-                        
-                    <EditText
-                        android:id="@+id/search_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Search Termux packages..."
-                        android:background="@android:color/transparent"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp" />
-                        
-                    <Button
-                        android:id="@+id/btn_search"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Search"
-                        android:backgroundTint="@color/ios_blue"
-                        android:textColor="#FFFFFF" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:columnCount="2"
+                android:rowCount="2"
+                android:alignmentMode="alignMargins"
+                android:columnOrderPreserved="false"
+                android:useDefaultMargins="true">
 
-            <!-- Setup Guide Section -->
+                <!-- Info Item -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="20dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_ios_info"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Source Info"
+                            android:layout_marginTop="8dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/ios_text_primary"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Package Item -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_package"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="20dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_ios_package"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pkg Search"
+                            android:layout_marginTop="8dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/ios_text_primary"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Setup Item -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_setup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="20dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_ios_setup"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Setup Guide"
+                            android:layout_marginTop="8dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/ios_text_primary"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </GridLayout>
+
+            <!-- Feature Content Display -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
+                android:layout_marginTop="24dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
-                
                 <LinearLayout
+                    android:id="@+id/feature_content_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
-                    
+                    android:padding="20dp">
                     <TextView
+                        android:id="@+id/feature_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Setup Guide"
-                        android:textStyle="bold"
+                        android:text="Select a feature"
                         android:textSize="18sp"
-                        android:textColor="@color/ios_blue" />
-                        
+                        android:textStyle="bold"
+                        android:textColor="@color/ios_blue"/>
                     <TextView
+                        android:id="@+id/feature_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="8dp"
-                        android:text="1. Update: pkg update &amp;&amp; pkg upgrade\n2. Storage: termux-setup-storage\n3. Git: pkg install git\n4. Python: pkg install python"
-                        android:textColor="@color/ios_text_secondary" />
+                        android:layout_marginTop="8dp"
+                        android:text="Tap an icon above to see details."
+                        android:textColor="@color/ios_text_secondary"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
