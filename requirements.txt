@@ -3,6 +3,5 @@ groq
 python-dotenv
 flask
 flask-cors
-groq
 requests
 rich

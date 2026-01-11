@@ -22,9 +22,9 @@ VERCEL_AUTH_URL = os.environ.get("VERCEL_AUTH_URL", "https://your-auth-app.verce
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 # Initialize Supabase if keys are provided
-supabase: any = None
+supabase_instance: any = None
 if SUPABASE_URL and SUPABASE_KEY:
-    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+    supabase_instance = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # AI Client (Groq Engine)
 client = Groq(
