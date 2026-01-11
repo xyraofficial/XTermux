@@ -7,7 +7,6 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.live import Live
 from rich.prompt import Prompt, Confirm
-from groq import Groq
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -21,7 +20,6 @@ VERCEL_AUTH_URL = os.environ.get("VERCEL_AUTH_URL", "https://your-auth-app.verce
 # Variables to be fetched from Vercel
 SUPABASE_URL = None
 SUPABASE_KEY = None
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 def fetch_config():
     global SUPABASE_URL, SUPABASE_KEY
@@ -45,11 +43,6 @@ supabase_instance: any = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase_instance = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# AI Client (Groq Engine)
-client = Groq(
-    api_key=GROQ_API_KEY or "gsk-placeholder",
-)
-
 class XTermux:
     def __init__(self):
         self.user_data = None
@@ -63,9 +56,9 @@ class XTermux:
         self.clear()
         width = console.width if console.width < 50 else 50
         console.print(Panel(
-            "[bold cyan]XTermux Script[/bold cyan]\n[dim]Config Loaded from Vercel[/dim]",
+            "[bold cyan]XTermux Script[/bold cyan]\n[dim]AI Proxy: Vercel Engine[/dim]",
             border_style="blue",
-            subtitle="[green]v1.2.0[/green]",
+            subtitle="[green]v1.3.0[/green]",
             width=width
         ))
 
@@ -100,18 +93,7 @@ class XTermux:
         self.header()
         console.print("[bold]Welcome to XTermux![/bold]")
         console.print(f"\nBackend: [cyan]{VERCEL_AUTH_URL}[/cyan]")
-        console.print(f"Supabase: [green]{'Connected' if SUPABASE_URL else 'Disconnected'}[/green]")
-        Prompt.ask("\n[dim]Press Enter[/dim]")
-
-    def packages(self):
-        self.header()
-        table = Table(title="Termux Packages", width=console.width if console.width < 50 else 50)
-        table.add_column("Pkg", style="cyan")
-        table.add_column("Status", style="green")
-        table.add_row("NodeJS", "OK")
-        table.add_row("Python", "OK")
-        table.add_row("Git", "OK")
-        console.print(table)
+        console.print(f"AI Engine: [green]Vercel Proxy[/green]")
         Prompt.ask("\n[dim]Press Enter[/dim]")
 
     def ai_chat(self):
@@ -121,29 +103,27 @@ class XTermux:
             time.sleep(2)
             return
 
-        console.print("[bold yellow]Groq AI (Llama-3.1)[/bold yellow]")
+        console.print("[bold yellow]Groq AI (via Vercel Proxy)[/bold yellow]")
         while True:
             user_input = Prompt.ask("\n[bold blue]>>[/bold blue]")
             if user_input.lower() in ["exit", "quit", "0"]:
                 break
             
-            with console.status("[bold green]Querying Groq AI..."):
+            with console.status("[bold green]AI is thinking..."):
                 try:
-                    response = client.chat.completions.create(
-                        model="llama-3.1-70b-versatile",
-                        messages=[{"role": "user", "content": user_input}]
+                    # Memanggil AI melalui Proxy Vercel
+                    response = requests.post(
+                        f"{self.vercel_url}/api/chat",
+                        json={"message": user_input},
+                        timeout=30
                     )
-                    console.print(f"\n[bold magenta]AI:[/bold magenta] {response.choices[0].message.content}")
+                    if response.status_code == 200:
+                        data = response.json()
+                        console.print(f"\n[bold magenta]AI:[/bold magenta] {data.get('reply')}")
+                    else:
+                        console.print(f"[red]Error: {response.text}[/red]")
                 except Exception as e:
-                    console.print(f"[red]Error: {str(e)}[/red]")
-
-    def setup_guide(self):
-        self.header()
-        console.print("[bold green]Setup Guide:[/bold green]")
-        console.print(f"1. Deploy backend to Vercel")
-        console.print(f"2. Set Secrets in Vercel Dashboard")
-        console.print(f"3. Set VERCEL_AUTH_URL in local .env")
-        Prompt.ask("\n[dim]Press Enter[/dim]")
+                    console.print(f"[red]Request Error: {str(e)}[/red]")
 
     def profile(self):
         self.header()
@@ -182,6 +162,26 @@ class XTermux:
         
         console.print("[bold green]Login Success![/bold green]")
         time.sleep(1.5)
+
+    # ... remaining methods (packages, setup_guide) remain similar
+    def packages(self):
+        self.header()
+        table = Table(title="Termux Packages", width=console.width if console.width < 50 else 50)
+        table.add_column("Pkg", style="cyan")
+        table.add_column("Status", style="green")
+        table.add_row("NodeJS", "OK")
+        table.add_row("Python", "OK")
+        table.add_row("Git", "OK")
+        console.print(table)
+        Prompt.ask("\n[dim]Press Enter[/dim]")
+
+    def setup_guide(self):
+        self.header()
+        console.print("[bold green]Setup Guide:[/bold green]")
+        console.print(f"1. Deploy backend to Vercel")
+        console.print(f"2. Set GROQ_API_KEY in Vercel Secret")
+        console.print(f"3. Set VERCEL_AUTH_URL in local .env")
+        Prompt.ask("\n[dim]Press Enter[/dim]")
 
 if __name__ == "__main__":
     app = XTermux()

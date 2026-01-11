@@ -17,11 +17,10 @@ groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 @app.route('/')
 def home():
-    return jsonify({"status": "XTermux Backend Running", "version": "1.0.0", "engine": "Groq"})
+    return jsonify({"status": "XTermux Backend Running", "version": "1.0.0", "engine": "Groq Proxy"})
 
 @app.route('/api/config')
 def get_config():
-    # Hanya kirimkan URL dan Anon Key, JANGAN kirimkan GROQ_API_KEY yang bersifat rahasia
     return jsonify({
         "supabase_url": SUPABASE_URL,
         "supabase_key": SUPABASE_KEY,
@@ -36,8 +35,9 @@ def auth(provider):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
+    # Menggunakan API Key dari Secret Vercel
     if not groq_client:
-        return jsonify({"error": "Groq AI not configured"}), 500
+        return jsonify({"error": "Groq AI not configured in Vercel secrets"}), 500
     
     data = request.json
     user_message = data.get('message')
