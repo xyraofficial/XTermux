@@ -22,7 +22,7 @@ VERCEL_AUTH_URL = os.environ.get("VERCEL_AUTH_URL", "https://your-auth-app.verce
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 # Initialize Supabase if keys are provided
-supabase: Client = None
+supabase: any = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
