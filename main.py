@@ -18,8 +18,12 @@ console = Console()
 # This uses Replit AI Integrations for OpenAI access
 # Does not require your own API key
 # Charges are billed to your credits
+api_key = os.environ.get("REPLIT_AI_API_KEY") or os.environ.get("OPENAI_API_KEY")
+if not api_key:
+    api_key = "sk-placeholder" # Fallback to prevent crash, will show error on call
+
 client = OpenAI(
-    api_key=os.environ.get("REPLIT_AI_API_KEY") or os.environ.get("OPENAI_API_KEY"),
+    api_key=api_key,
     base_url="https://api.replit.com/ai/v1" if os.environ.get("REPLIT_AI_API_KEY") else None
 )
 
