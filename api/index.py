@@ -1,13 +1,13 @@
-import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import os
 from supabase import create_client
 from groq import Groq
 
 app = Flask(__name__)
 CORS(app)
 
-# Environment Variables
+# Env
 SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
 SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY", "")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
@@ -51,5 +51,7 @@ def chat():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Tambahkan alias untuk Vercel
-app_handler = app
+# Entry point for Vercel
+# Vercel looking for "app" by default for Flask
+# but we used builds in vercel.json previously. 
+# Let's simplify and use the default zero-config pattern.
