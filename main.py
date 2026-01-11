@@ -15,13 +15,32 @@ load_dotenv()
 
 console = Console()
 
-# Environment Variables for External Services (Vercel + Supabase)
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY")
+# Primary Configuration from Vercel Backend
 VERCEL_AUTH_URL = os.environ.get("VERCEL_AUTH_URL", "https://your-auth-app.vercel.app")
+
+# Variables to be fetched from Vercel
+SUPABASE_URL = None
+SUPABASE_KEY = None
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
-# Initialize Supabase if keys are provided
+def fetch_config():
+    global SUPABASE_URL, SUPABASE_KEY
+    try:
+        with console.status("[bold green]Fetching configuration from Vercel..."):
+            response = requests.get(f"{VERCEL_AUTH_URL}/api/config", timeout=10)
+            if response.status_code == 200:
+                config = response.json()
+                SUPABASE_URL = config.get("supabase_url")
+                SUPABASE_KEY = config.get("supabase_key")
+                return True
+    except Exception as e:
+        console.print(f"[red]Failed to fetch config: {str(e)}[/red]")
+    return False
+
+# Initial fetch
+fetch_config()
+
+# Initialize Supabase if keys are fetched
 supabase_instance: any = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase_instance = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -38,17 +57,15 @@ class XTermux:
         self.vercel_url = VERCEL_AUTH_URL
 
     def clear(self):
-        # Optimization for Termux: ensure clear command works
         os.system('clear' if os.name == 'posix' else 'cls')
 
     def header(self):
         self.clear()
-        # Terminal-optimized width
         width = console.width if console.width < 50 else 50
         console.print(Panel(
-            "[bold cyan]XTermux Script[/bold cyan]\n[dim]Vercel + Supabase Integrated[/dim]",
+            "[bold cyan]XTermux Script[/bold cyan]\n[dim]Config Loaded from Vercel[/dim]",
             border_style="blue",
-            subtitle="[green]v1.1.0[/green]",
+            subtitle="[green]v1.2.0[/green]",
             width=width
         ))
 
@@ -82,8 +99,8 @@ class XTermux:
     def home(self):
         self.header()
         console.print("[bold]Welcome to XTermux![/bold]")
-        console.print("\nOptimized for Termux environments.")
-        console.print("Using Vercel for Auth & Supabase for Data.")
+        console.print(f"\nBackend: [cyan]{VERCEL_AUTH_URL}[/cyan]")
+        console.print(f"Supabase: [green]{'Connected' if SUPABASE_URL else 'Disconnected'}[/green]")
         Prompt.ask("\n[dim]Press Enter[/dim]")
 
     def packages(self):
@@ -104,7 +121,7 @@ class XTermux:
             time.sleep(2)
             return
 
-        console.print("[bold yellow]AI Assistant[/bold yellow] ([dim]exit to quit[/dim])")
+        console.print("[bold yellow]Groq AI (Llama-3.1)[/bold yellow]")
         while True:
             user_input = Prompt.ask("\n[bold blue]>>[/bold blue]")
             if user_input.lower() in ["exit", "quit", "0"]:
@@ -123,9 +140,9 @@ class XTermux:
     def setup_guide(self):
         self.header()
         console.print("[bold green]Setup Guide:[/bold green]")
-        console.print("1. Set `VERCEL_AUTH_URL` in .env")
-        console.print("2. Set `SUPABASE_URL` & `KEY` in .env")
-        console.print("3. Run `python main.py` in Termux")
+        console.print(f"1. Deploy backend to Vercel")
+        console.print(f"2. Set Secrets in Vercel Dashboard")
+        console.print(f"3. Set VERCEL_AUTH_URL in local .env")
         Prompt.ask("\n[dim]Press Enter[/dim]")
 
     def profile(self):
@@ -153,19 +170,17 @@ class XTermux:
         auth_url = f"{self.vercel_url}/auth/{provider}"
         
         console.print(f"\n[bold yellow]Redirecting to Vercel...[/bold yellow]")
-        console.print(f"[link={auth_url}]Open this URL: {auth_url}[/link]")
+        console.print(f"[link={auth_url}]Open: {auth_url}[/link]")
         
-        # Simulasi alur callback dari Vercel/Supabase
         with console.status("Verifying Session..."):
             time.sleep(2)
-            # Di sini biasanya ada pengecekan ke endpoint Vercel/Supabase Auth
             self.user_data = {
                 "email": f"user_{provider}@example.com",
                 "provider": provider.capitalize()
             }
             self.is_connected = True
         
-        console.print("[bold green]Login Success! Returned to XTermux.[/bold green]")
+        console.print("[bold green]Login Success![/bold green]")
         time.sleep(1.5)
 
 if __name__ == "__main__":

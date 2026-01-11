@@ -19,6 +19,14 @@ groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 def home():
     return jsonify({"status": "XTermux Backend Running", "version": "1.0.0", "engine": "Groq"})
 
+@app.route('/api/config')
+def get_config():
+    # Hanya kirimkan URL dan Anon Key, JANGAN kirimkan GROQ_API_KEY yang bersifat rahasia
+    return jsonify({
+        "supabase_url": SUPABASE_URL,
+        "supabase_key": SUPABASE_KEY,
+    })
+
 @app.route('/auth/<provider>')
 def auth(provider):
     return jsonify({
