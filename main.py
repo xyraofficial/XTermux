@@ -7,7 +7,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.live import Live
 from rich.prompt import Prompt, Confirm
-from openai import OpenAI
+from groq import Groq
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -19,17 +19,16 @@ console = Console()
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY")
 VERCEL_AUTH_URL = os.environ.get("VERCEL_AUTH_URL", "https://your-auth-app.vercel.app")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 # Initialize Supabase if keys are provided
 supabase: any = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# AI Client (Call Vercel API or Direct OpenAI)
-# If VERCEL_AUTH_URL is used for AI proxy, base_url should point there
-client = OpenAI(
-    api_key=OPENAI_API_KEY or "sk-placeholder",
+# AI Client (Groq Engine)
+client = Groq(
+    api_key=GROQ_API_KEY or "gsk-placeholder",
 )
 
 class XTermux:
@@ -111,12 +110,10 @@ class XTermux:
             if user_input.lower() in ["exit", "quit", "0"]:
                 break
             
-            with console.status("[bold green]Querying AI..."):
+            with console.status("[bold green]Querying Groq AI..."):
                 try:
-                    # Logic: In production, this would call your Vercel API endpoint
-                    # which holds the actual API Key for security.
                     response = client.chat.completions.create(
-                        model="gpt-4o",
+                        model="llama-3.1-70b-versatile",
                         messages=[{"role": "user", "content": user_input}]
                     )
                     console.print(f"\n[bold magenta]AI:[/bold magenta] {response.choices[0].message.content}")
