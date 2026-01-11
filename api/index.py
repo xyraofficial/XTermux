@@ -1,9 +1,9 @@
-import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import os
 from groq import Groq
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 CORS(app)
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
@@ -18,6 +18,10 @@ def get_groq():
 
 @app.route('/')
 def home():
+    return render_template('index.html')
+
+@app.route('/api/status')
+def status():
     return jsonify({
         "status": "XTermux AI Proxy Running",
         "engine": "Groq",
