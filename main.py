@@ -1,27 +1,19 @@
 import os
 import sys
 import time
+import requests
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 from rich.prompt import Prompt
-from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
 console = Console()
 
-# Configuration (Direct Groq AI)
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
-# Initialize Groq Client
-client = None
-if GROQ_API_KEY:
-    try:
-        client = Groq(api_key=GROQ_API_KEY)
-    except Exception as e:
-        console.print(f"[red]Error initializing Groq: {e}[/red]")
+# Configuration (AI Proxy via Vercel)
+VERCEL_AUTH_URL = os.environ.get("VERCEL_AUTH_URL", "https://your-auth-app.vercel.app")
 
 class XTermux:
     def __init__(self):
