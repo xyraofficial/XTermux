@@ -54,30 +54,46 @@ class XTermux:
 
     def header(self):
         self.clear()
-        width = console.width if console.width < 50 else 50
+        # Responsive width for Termux zooming
+        term_width = console.width
+        box_width = term_width if term_width < 60 else 60
+        
         console.print(Panel(
-            "[bold cyan]XTermux Script[/bold cyan]\n[dim]AI Proxy: Vercel Engine[/dim]",
+            "[bold cyan]XTermux Script[/bold cyan]\n[dim]Responsive UI Mode[/dim]",
             border_style="blue",
-            subtitle="[green]v1.3.0[/green]",
-            width=width
+            subtitle="[green]v1.4.0[/green]",
+            width=box_width,
+            expand=True
         ))
 
     def main_menu(self):
         while True:
             self.header()
+            term_width = console.width
+            box_width = term_width if term_width < 60 else 60
+
             if self.is_connected and self.user_data:
                 email = self.user_data.get('email', 'User')
                 console.print(f"[green]● Connected:[/green] {email}")
             else:
                 console.print("[red]○ Disconnected[/red]")
             
-            table = Table(show_header=False, box=None, padding=(0, 1))
+            table = Table(show_header=False, box=None, padding=(0, 1), expand=True)
+            table.add_column(justify="left")
+            table.add_column(justify="left")
+            
             table.add_row("[1] Home", "[2] Packages")
             table.add_row("[3] AI Chat", "[4] Setup Guide")
             table.add_row("[5] Profile", "[6] Login/Auth")
             table.add_row("[0] Exit", "")
             
-            console.print(Panel(table, title="[bold yellow]Menu[/bold yellow]", border_style="yellow", width=console.width if console.width < 50 else 50))
+            console.print(Panel(
+                table, 
+                title="[bold yellow]Menu[/bold yellow]", 
+                border_style="yellow", 
+                width=box_width,
+                expand=True
+            ))
             
             choice = Prompt.ask("Select", choices=["1", "2", "3", "4", "5", "6", "0"])
             
@@ -127,6 +143,8 @@ class XTermux:
 
     def profile(self):
         self.header()
+        term_width = console.width
+        box_width = term_width if term_width < 60 else 60
         if not self.is_connected or not self.user_data:
             console.print("[red]Not logged in.[/red]")
         else:
@@ -135,7 +153,7 @@ class XTermux:
                 f"Provider: {self.user_data.get('provider')}\n"
                 f"Status: Active"
             )
-            console.print(Panel(profile_info, title="[bold]User Profile[/bold]", width=console.width if console.width < 50 else 50))
+            console.print(Panel(profile_info, title="[bold]User Profile[/bold]", width=box_width, expand=True))
         Prompt.ask("\n[dim]Press Enter[/dim]")
 
     def auth_flow(self):
@@ -166,7 +184,9 @@ class XTermux:
     # ... remaining methods (packages, setup_guide) remain similar
     def packages(self):
         self.header()
-        table = Table(title="Termux Packages", width=console.width if console.width < 50 else 50)
+        term_width = console.width
+        box_width = term_width if term_width < 60 else 60
+        table = Table(title="Termux Packages", width=box_width, expand=True)
         table.add_column("Pkg", style="cyan")
         table.add_column("Status", style="green")
         table.add_row("NodeJS", "OK")
