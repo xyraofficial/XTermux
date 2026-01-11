@@ -84,26 +84,31 @@ class XTermux:
 
     def ai_chat(self):
         self.header()
-        if not client:
-            console.print("[red]GROQ_API_KEY not found in .env![/red]")
+        if not VERCEL_AUTH_URL or "your-auth-app" in VERCEL_AUTH_URL:
+            console.print("[red]VERCEL_AUTH_URL not configured in .env![/red]")
             Prompt.ask("\n[dim]Press Enter[/dim]")
             return
 
-        console.print("[bold yellow]Groq AI Chat[/bold yellow] ([dim]type 'exit' to quit[/dim])")
+        console.print("[bold yellow]Groq AI (via Vercel Proxy)[/bold yellow]")
         while True:
             user_input = Prompt.ask("\n[bold blue]>>[/bold blue]")
             if user_input.lower() in ["exit", "quit", "0"]:
                 break
             
-            with console.status("[bold green]Thinking..."):
+            with console.status("[bold green]AI is thinking..."):
                 try:
-                    completion = client.chat.completions.create(
-                        model="llama-3.1-70b-versatile",
-                        messages=[{"role": "user", "content": user_input}]
+                    response = requests.post(
+                        f"{VERCEL_AUTH_URL}/api/chat",
+                        json={"message": user_input},
+                        timeout=30
                     )
-                    console.print(f"\n[bold magenta]AI:[/bold magenta] {completion.choices[0].message.content}")
+                    if response.status_code == 200:
+                        data = response.json()
+                        console.print(f"\n[bold magenta]AI:[/bold magenta] {data.get('reply')}")
+                    else:
+                        console.print(f"[red]Error: {response.text}[/red]")
                 except Exception as e:
-                    console.print(f"[red]Error: {str(e)}[/red]")
+                    console.print(f"[red]Request Error: {str(e)}[/red]")
 
     def packages(self):
         self.header()
