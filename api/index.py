@@ -7,20 +7,39 @@ from groq import Groq
 app = Flask(__name__)
 CORS(app)
 
-# Environment Variables (Set these in Vercel Dashboard)
+# Environment Variables (Set ini di Dashboard Vercel)
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
-supabase_instance: any = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and SUPABASE_KEY else None
-groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
+# Tambahkan pengecekan agar tidak crash jika env tidak ada saat startup
+supabase_instance = None
+if SUPABASE_URL and SUPABASE_KEY:
+    try:
+        supabase_instance = create_client(SUPABASE_URL, SUPABASE_KEY)
+    except Exception:
+        pass
+
+groq_client = None
+if GROQ_API_KEY:
+    try:
+        groq_client = Groq(api_key=GROQ_API_KEY)
+    except Exception:
+        pass
 
 @app.route('/')
 def home():
-    return jsonify({"status": "XTermux Backend Running", "version": "1.0.0", "engine": "Groq Proxy"})
+    return jsonify({
+        "status": "XTermux Backend Running",
+        "version": "1.4.1",
+        "engine": "Groq Proxy",
+        "config_ready": all([SUPABASE_URL, SUPABASE_KEY, GROQ_API_KEY])
+    })
 
 @app.route('/api/config')
 def get_config():
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return jsonify({"error": "Supabase not configured in Vercel environment"}), 500
     return jsonify({
         "supabase_url": SUPABASE_URL,
         "supabase_key": SUPABASE_KEY,
@@ -28,6 +47,8 @@ def get_config():
 
 @app.route('/auth/<provider>')
 def auth(provider):
+    if not SUPABASE_URL:
+        return jsonify({"error": "Backend not configured"}), 500
     return jsonify({
         "message": f"Redirecting to {provider} auth...",
         "url": f"{SUPABASE_URL}/auth/v1/authorize?provider={provider}"
@@ -35,12 +56,14 @@ def auth(provider):
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
-    # Menggunakan API Key dari Secret Vercel
     if not groq_client:
         return jsonify({"error": "Groq AI not configured in Vercel secrets"}), 500
     
-    data = request.json
+    data = request.get_json(silent=True) or {}
     user_message = data.get('message')
+    if not user_message:
+        return jsonify({"error": "Message is required"}), 400
+        
     model = data.get('model', 'llama-3.1-70b-versatile')
     
     try:
