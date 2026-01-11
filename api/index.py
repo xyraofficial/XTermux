@@ -14,17 +14,30 @@ GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 
 def get_supabase():
     if SUPABASE_URL and SUPABASE_KEY:
-        return create_client(SUPABASE_URL, SUPABASE_KEY)
+        try:
+            return create_client(SUPABASE_URL, SUPABASE_KEY)
+        except:
+            return None
     return None
 
 def get_groq():
     if GROQ_API_KEY:
-        return Groq(api_key=GROQ_API_KEY)
+        try:
+            return Groq(api_key=GROQ_API_KEY)
+        except:
+            return None
     return None
 
 @app.route('/')
 def index():
-    return jsonify({"status": "online", "service": "XTermux Backend"})
+    return jsonify({
+        "status": "online", 
+        "service": "XTermux Backend",
+        "env_check": {
+            "supabase": bool(SUPABASE_URL),
+            "groq": bool(GROQ_API_KEY)
+        }
+    })
 
 @app.route('/api/config')
 def config():
@@ -50,8 +63,3 @@ def chat():
         return jsonify({"reply": completion.choices[0].message.content})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-# Entry point for Vercel
-# Vercel looking for "app" by default for Flask
-# but we used builds in vercel.json previously. 
-# Let's simplify and use the default zero-config pattern.
